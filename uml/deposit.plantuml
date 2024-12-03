@@ -1,0 +1,25 @@
+@startuml
+autonumber
+actor User
+
+group create&cancel deposit order
+    User->Broker: do deposit
+    Broker->WmWallet: do deposit(source_id,chain,coin,fiat_amount,symbol)
+    WmWallet-->Broker: ret order(order_id,chain,coin,exchange_rate,amount)
+    WmWallet-->DB: save
+end
+
+group deposit
+    WmWallet-->Broker: webhook callback
+    Broker->WmWallet: check transaction exists
+    alt
+    else transaction exists
+    WmWallet-->Broker: transaction info
+    else not exists
+    WmWallet-->Broker: null
+    end
+end
+
+database DB
+
+@enduml

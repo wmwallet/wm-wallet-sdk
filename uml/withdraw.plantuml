@@ -1,0 +1,22 @@
+@startuml
+autonumber
+actor User
+participant WmWallet
+database DB
+User->WmWallet: withdraw
+WmWallet->DB: check balance && freeze/deduct amount
+group not enough
+DB-->WmWallet: not enough, cancel
+WmWallet-->User: withdraw failed
+end
+
+group enough
+WmWallet->Wallet: withdraw
+Wallet-->WmWallet: ok
+Wallet-->WmWallet: callback withdraw detail
+group detail succ
+WmWallet->DB: deduct amount
+else failed
+WmWallet->DB: unfeeze/add amount
+end
+@enduml
