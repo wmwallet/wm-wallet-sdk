@@ -250,6 +250,14 @@ resp:
 | status_desc   | string         |             |
 
 
+| status | status_desc   |
+|--------|---------------|
+| 0      | Default       |
+| 8      | Success       |
+| 12     | User Cancel   |
+| 16     | Expire Cancel |
+| 20     | Less Amount   |
+
 ### Deposit.Cancel
 
 path:    `/v1/api/broker/order/cancel`
@@ -284,6 +292,12 @@ resp:
 | order_id      | string         |             |
 | status        | int8           |             |
 | status_desc   | string         |             |
+
+| status | status_desc |
+|--------|-------------|
+| 0      | Default     |
+| 4      | Success     |
+| 8      | Fail        |
 
 ### Withdraw.Create
 
