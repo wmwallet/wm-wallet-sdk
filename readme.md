@@ -114,14 +114,14 @@
 
 ### Broker must in header.
 
-### Chain support:
+### Chain Support:
 
 | chain_id | chain_name |
 |----------|------------|
 | 1        | TRON       |
 | 2        | TON        |
 
-### Coin support:
+### Coin Support:
 
 | coin_id | coin_name |
 |---------|-----------|
@@ -129,44 +129,64 @@
 | 2       | TRX       |
 | 3       | TON       |
 
+### Symbol Support
+
+| symbol   | 
+|----------|
+| USDT/TON |
+| USDT/TOX |
+| ......   |
+
 
 ### resp always like:
 
 #### resp from gateway:
 ```json
 {
+  "code": 0,
+  "data": {
     "code": 0,
+    "msg": "",
     "data": {
-        "code": 0,
-        "msg": "",
-        "data": {
-            "chain": "TON",
-            "hash": "og6hrZpiFxjsKsfRAr+CIQd",
-            "address": "EQAkhkg79yqAqbG67Ch5m8j",
-            "tag": "2",
-            "coin": "USDT",
-            "amount": "0.222222",
-            "blockNo": "",
-            "txId": "da2c87300d993cc924b9085af5f5183a"
-        }
+      "source_id": "20241205114600032509",
+      "chain_id": 2,
+      "coin_id": 1,
+      "address": "UQBetutxT6cLe54yHYRxKsUCW_bnvjYa_02GWFWQHaigBYWg",
+      "tag": "13",
+      "hash": "8To7dqNJ7kJPmTz4F9HSYpU/wvGZbx4q2RdkYutsm8E=",
+      "fiat_amount": "2",
+      "symbol": "USDT/CNY",
+      "exchange_rate": "7.274951607768018",
+      "amount": "0.2749159180474064",
+      "order_id": "06ceb53730794f62be1a29d8aaf2efeb",
+      "url": "http://43.156.157.230/wm/?broker=bacb849551df44e19608b46f9c4db031&no=06ceb53730794f62be1a29d8aaf2efeb&lang=zh",
+      "status": 8,
+      "status_desc": "订单成功"
     }
+  }
 }
 ```
 #### api resp body in data:
 
 ``` json
 {
-    "msg": "",
     "code": 0,
+    "msg": "",
     "data": {
-        "chain": "TON",
-        "hash": "og6hrZpiFxjsKsfRAr+CIQdZp",
-        "address": "EQAkhkg79yqAqbG67Ch5m8j",
-        "tag": "2",
-        "coin": "USDT",
-        "amount": "0.222222",
-        "blockNo": "",
-        "txId": "da2c87300d993cc924b9085af5f5183a"
+        "source_id": "20241205114600032509",
+        "chain_id": 2,
+        "coin_id": 1,
+        "address": "UQBetutxT6cLe54yHYRxKsUCW_bnvjYa_02GWFWQHaigBYWg",
+        "tag": "13",
+        "hash": "8To7dqNJ7kJPmTz4F9HSYpU/wvGZbx4q2RdkYutsm8E=",
+        "fiat_amount": "2",
+        "symbol": "USDT/CNY",
+        "exchange_rate": "7.274951607768018",
+        "amount": "0.2749159180474064",
+        "order_id": "06ceb53730794f62be1a29d8aaf2efeb",
+        "url": "http://43.156.157.230/wm/?broker=bacb849551df44e19608b46f9c4db031&no=06ceb53730794f62be1a29d8aaf2efeb&lang=zh",
+        "status": 8,
+        "status_desc": "订单成功"
     }
 }
 ```
@@ -179,12 +199,36 @@ path: `/v1/api/broker/order/create`
 
 req:
 
+| name         | type            | comment | require |
+|--------------|-----------------|---------|--------|
+| source_id    | string          | uniq id | y      |
+| chain_id     | int             |         | y      |
+| coin_id      | int             |         | y      |
+| fiat_amount  | decimal(40,18)  |         | y      |
+| symbol       | string          |         | y      |
+
+resp:
+
+| name          | type           | comment       |
+|---------------|----------------|---------------|
+| source_id     | string         | broker uid    |
+| chain_id      | int            |               |
+| coin_id       | int            |               |
+| fiat_amount   | decimal(40,18) |               |
+| exchange_rate | decimal(40,18) |               |
+| amount        | decimal(40,18) |               |
+| order_id      | string         | wm wallet uid |
+| url           | string         | a html view   |
+
+### Deposit.Detail
+
+path: `/v1/api/broker/order/detail`
+
+req:
+
 | name         | type           | comment | require |
 |--------------|----------------|---------|---------|
 | source_id    | string         | uniq id | y       |
-| chain_id     | int            |         | y       |
-| coin_id      | int            |         | y       |
-| fiat_amount  | decimal(40,18) |         | y       |
 
 resp:
 
@@ -193,11 +237,18 @@ resp:
 | source_id     | string         |             |
 | chain_id      | int            |             |
 | coin_id       | int            |             |
+| address       | string         |             |
+| tag           | string         |             |
+| hash          | string         |             |
 | fiat_amount   | decimal(40,18) |             |
-| order_id      | string         |             |
+| symbol        | string         |             |
 | exchange_rate | decimal(40,18) |             |
 | amount        | decimal(40,18) |             |
+| order_id      | string         |             |
 | url           | string         | a html view |
+| status        | int8           |             |
+| status_desc   | string         |             |
+
 
 ### Deposit.Cancel
 
@@ -211,22 +262,28 @@ req:
 
 resp:
 
-| name | type | comment          |
-|------|------|------------------|
-| null |      |                  |
+| name  | type | comment |
+|-------|------|---------|
+| null  |      |         |
 
 
 ### Deposit Callback Struct
 
-| name          | type           | comment            |
-|---------------|----------------|--------------------|
-| source_id     | string         |                    |
-| order_id      | string         |                    |
-| fiat_amount   | decimal(40,18) |                    |
-| exchange_rate | decimal(40,18) |                    |
-| symbol        | string         | coin, USDT/TON/... |
-| amount        | decimal(40,18) | 0.123456           |
-| status        | int8           |                    |
+| name          | type           | comment     |
+|---------------|----------------|-------------|
+| source_id     | string         |             |
+| chain_id      | int            |             |
+| coin_id       | int            |             |
+| address       | string         |             |
+| tag           | string         |             |
+| hash          | string         |             |
+| fiat_amount   | decimal(40,18) |             |
+| symbol        | string         | USDT/TON    |
+| exchange_rate | decimal(40,18) |             |
+| amount        | decimal(40,18) | 0.123456    |
+| order_id      | string         |             |
+| status        | int8           |             |
+| status_desc   | string         |             |
 
 ### Withdraw.Create
 
@@ -262,47 +319,78 @@ resp:
 | tag         | string         |         |
 | amount      | decimal(40,18) |         |
 | status      | int8           |         |
+| status_desc | string         |         |
 
 
 ## sdk example
 
 ```go
-// prod
-ops := []sdk.Option{
-    sdk.WithSecretPath("config/public_key.pem"),
-    sdk.WithCertPath(("config/test_ca.crt"), ("config/test_client.crt"), ("config/test_client.key")),
-    sdk.WithCustomer("test"),
-}
-w, err := sdk.Init(ops...)
-if err != nil {
-t.Fatal(err)
+package thirdparty
+
+import (
+	"context"
+	sdk "github.com/wmwallet/wm-wallet-sdk"
+	"github.com/wmwallet/wm-wallet-sdk/deposit"
+	"github.com/wmwallet/wm-wallet-sdk/withdraw"
+)
+
+const CustomerName = "test"
+
+const Url = "http://wmwallet.pro"
+
+type WmWalletSDK struct {
+	wmWalletSDK *sdk.WmWalletClient
 }
 
-d := NewDeposit(w, URL)
-resp, err := d.GetNewAddress(context.Background(), &GetNewAddrReq{
-Network:   "TON",
-RequestId: "12345",
-})
-
-```
-
-```go
-// test
-ops := []sdk.Option{
-sdk.WithCustomer("a"),
-sdk.WithTest(true),
-}
-w, err := sdk.Init(ops...)
-if err != nil {
-t.Fatal(err)
+func NewWmWalletSDK() *WmWalletSDK {
+	ops := []sdk.Option{
+		sdk.WithSecretPath("wallet/public_key.pem"),
+		sdk.WithCertPath("wallet/ca.crt", "wallet/client.crt", "wallet/client.key"),
+		sdk.WithCustomer(CustomerName),
+	}
+	wmWalletSDK, err := sdk.Init(ops...)
+	if err != nil {
+		panic(err)
+	}
+	return &WmWalletSDK{
+		wmWalletSDK: wmWalletSDK,
+	}
 }
 
-d := NewDeposit(URL)
-resp, err := d.GetNewAddress(context.Background(), &GetNewAddrReq{
-Network:   "TON",
-RequestId: "12345",
-})
-if err != nil {
-t.Fatal(err)
+func (wws *WmWalletSDK) DepositOrderCreate(req *deposit.CreateOrderReq) (resp *deposit.CreateOrderResp, err error) {
+	d := deposit.NewDeposit(wws.wmWalletSDK, Url)
+	resp, err = d.Create(context.Background(), req)
+	if err != nil {
+		return
+	}
+	return
 }
+
+func (wws *WmWalletSDK) DepositOrderDetail(req *deposit.GetDetailRequest) (resp *deposit.GetDetailResponse, err error) {
+	d := deposit.NewDeposit(wws.wmWalletSDK, Url)
+	resp, err = d.Detail(context.Background(), req)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (wws *WmWalletSDK) DepositOrderCancel(req *deposit.CancelOrderReq) (resp *deposit.CancelOrderResp, err error) {
+	d := deposit.NewDeposit(wws.wmWalletSDK, Url)
+	resp, err = d.Cancel(context.Background(), req)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (wws *WmWalletSDK) WithdrawOrderCreate(req *withdraw.CreateOrderReq) (resp *withdraw.CreateOrderResp, err error) {
+	w := withdraw.NewWithdraw(wws.wmWalletSDK, Url)
+	resp, err = w.Create(context.Background(), req)
+	if err != nil {
+		return
+	}
+	return
+}
+
 ```
