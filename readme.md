@@ -134,7 +134,7 @@
 | symbol   | 
 |----------|
 | USDT/TON |
-| USDT/TOX |
+| USDT/TRX |
 | ......   |
 
 
@@ -291,14 +291,14 @@ path:    `/v1/api/broker/order/withdraw`
 
 req:
 
-| name      | type       | comment | require |
-|-----------|------------|---------|---------|
-| source_id | string     | uniq id | y       |
-| chain_id  | string     |         | y       |
-| coin_id   | string     |         | y       |
-| address   | string     |         | y       |
-| tag       | string     |         | y       |
-| amount    | string     |         | y       |
+| name      | type           | comment | require |
+|-----------|----------------|---------|---------|
+| source_id | string         | uniq id | y       |
+| chain_id  | int            |         | y       |
+| coin_id   | int            |         | y       |
+| address   | string         |         | y       |
+| tag       | string         |         | y       |
+| amount    | decimal(40,18) |         | y       |
 
 resp:
 
@@ -306,6 +306,35 @@ resp:
 |-----------------|-----------------|----------------------------------------|
 | source_id       | string          | uniq id                                |
 | order_id        | string          |                                        |
+
+
+### Withdraw.Detail
+
+path:    `/v1/api/broker/order/withdraw-detail`
+
+req:
+
+| name      | type           | comment | require |
+|-----------|----------------|---------|---------|
+| source_id | string         | uniq id | y       |
+
+resp:
+
+| name          | type            | comment |
+|---------------|-----------------|---------|
+| source_id     | string          | uniq id |
+| chain_id      | int             |         |
+| coin_id       | int             |         |
+| address       | string          |         |
+| tag           | string          |         |
+| hash          | string          |         |
+| fiat_amount   | decimal(40,18)  |         |
+| symbol        | string          |         |
+| exchange_rate | decimal(40,18)  |         |
+| amount        | decimal(40,18)  |         |
+| order_id      | string          |         |
+| status        | int8            |         |
+| status_desc   | string          |         |
 
 
 ### Withdraw Callback Struct
@@ -387,6 +416,15 @@ func (wws *WmWalletSDK) DepositOrderCancel(req *deposit.CancelOrderReq) (resp *d
 func (wws *WmWalletSDK) WithdrawOrderCreate(req *withdraw.CreateOrderReq) (resp *withdraw.CreateOrderResp, err error) {
 	w := withdraw.NewWithdraw(wws.wmWalletSDK, Url)
 	resp, err = w.Create(context.Background(), req)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (wws *WmWalletSDK) WithdrawOrderDetail(req *withdraw.GetDetailRequest) (resp *withdraw.GetDetailResponse, err error) {
+	w := withdraw.NewWithdraw(wws.wmWalletSDK, Url)
+	resp, err = w.Detail(context.Background(), req)
 	if err != nil {
 		return
 	}
