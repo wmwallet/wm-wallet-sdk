@@ -250,13 +250,13 @@ resp:
 | status_desc   | string         |             |
 
 
-| status | status_desc   |
-|--------|---------------|
-| 0      | Default       |
-| 8      | Success       |
-| 12     | User Cancel   |
-| 16     | Expire Cancel |
-| 20     | Less Amount   |
+| status | status_desc     |
+|--------|-----------------|
+| 0      | Order Created   |
+| 8      | Order Success   |
+| 12     | User Cancel     |
+| 16     | Expire Cancel   |
+| 20     | Less Amount     |
 
 ### Deposit.Cancel
 
@@ -293,11 +293,11 @@ resp:
 | status        | int8           |             |
 | status_desc   | string         |             |
 
-| status | status_desc |
-|--------|-------------|
-| 0      | Default     |
-| 4      | Success     |
-| 8      | Fail        |
+| status | status_desc      |
+|--------|------------------|
+| 0      | Withdraw Doing   |
+| 4      | Withdraw Success |
+| 8      | Withdraw Fail    |
 
 ### Withdraw.Create
 
