@@ -346,6 +346,7 @@ resp:
 | symbol        | string          |         |
 | exchange_rate | decimal(40,18)  |         |
 | amount        | decimal(40,18)  |         |
+| service_fee   | decimal(40,18)  |         |
 | order_id      | string          |         |
 | status        | int8            |         |
 | status_desc   | string          |         |
@@ -361,6 +362,7 @@ resp:
 | coin_id     | int            |         |
 | tag         | string         |         |
 | amount      | decimal(40,18) |         |
+| service_fee | decimal(40,18) |         |
 | status      | int8           |         |
 | status_desc | string         |         |
 
