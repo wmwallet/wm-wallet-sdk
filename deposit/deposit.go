@@ -14,11 +14,12 @@ import (
 
 type (
 	CreateOrderReq struct {
-		SourceId   string          `json:"source_id"`
-		ChainId    int             `json:"chain_id"`
-		CoinId     int             `json:"coin_id"`
-		FiatAmount decimal.Decimal `json:"fiat_amount"`
-		Symbol     string          `json:"symbol"`
+		SourceId    string          `json:"source_id"`
+		ChainId     int             `json:"chain_id"`
+		CoinId      int             `json:"coin_id"`
+		FiatAmount  decimal.Decimal `json:"fiat_amount"`
+		Symbol      string          `json:"symbol"`
+		CallbackUrl string          `json:"callback_url"`
 	}
 
 	CreateOrderResp struct {

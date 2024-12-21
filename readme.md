@@ -206,6 +206,7 @@ req:
 | coin_id      | int             |         | y      |
 | fiat_amount  | decimal(40,18)  |         | y      |
 | symbol       | string          |         | y      |
+| callback_url | string          |         | y      |
 
 resp:
 
@@ -305,14 +306,15 @@ path:    `/v1/api/broker/order/withdraw`
 
 req:
 
-| name      | type           | comment | require |
-|-----------|----------------|---------|---------|
-| source_id | string         | uniq id | y       |
-| chain_id  | int            |         | y       |
-| coin_id   | int            |         | y       |
-| address   | string         |         | y       |
-| tag       | string         |         | y       |
-| amount    | decimal(40,18) |         | y       |
+| name         | type           | comment | require |
+|--------------|----------------|---------|---------|
+| source_id    | string         | uniq id | y       |
+| chain_id     | int            |         | y       |
+| coin_id      | int            |         | y       |
+| address      | string         |         | y       |
+| tag          | string         |         | y       |
+| amount       | decimal(40,18) |         | y       |
+| callback_url | string          |         | y      |
 
 resp:
 
