@@ -12,19 +12,20 @@ type (
 		ExchangeRate decimal.Decimal `json:"exchange_rate"`
 		Symbol       string          `json:"symbol"`
 		Amount       decimal.Decimal `json:"amount"`
+		ServiceFee   decimal.Decimal `json:"service_fee"`
 		Status       int8            `json:"status"`
 	}
 	DepositCallbackResp struct{}
 
 	WithdrawCallbackReq struct {
-		SourceId   string          `json:"source_id"`
-		OrderId    string          `json:"order_id"`
-		ChainId    int             `json:"chain_id"`
-		CoinId     int             `json:"coin_id"`
-		Tag        string          `json:"tag"`
-		Amount     decimal.Decimal `json:"amount"`
-		ServiceFee decimal.Decimal `json:"service_fee"`
-		Status     int8            `json:"status"`
+		SourceId string          `json:"source_id"`
+		OrderId  string          `json:"order_id"`
+		ChainId  int             `json:"chain_id"`
+		CoinId   int             `json:"coin_id"`
+		Tag      string          `json:"tag"`
+		Amount   decimal.Decimal `json:"amount"`
+		GasFee   decimal.Decimal `json:"gas_fee"`
+		Status   int8            `json:"status"`
 	}
 
 	WithdrawCallbackResp struct{}

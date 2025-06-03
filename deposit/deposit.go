@@ -31,6 +31,7 @@ type (
 		OrderId      string          `json:"order_id"`
 		ExchangeRate decimal.Decimal `json:"exchange_rate"`
 		Amount       decimal.Decimal `json:"amount"`
+		ServiceFee   decimal.Decimal `json:"service_fee"`
 		Url          string          `json:"url"`
 	}
 
@@ -49,6 +50,7 @@ type (
 		Symbol       string          `json:"symbol"`
 		ExchangeRate decimal.Decimal `json:"exchange_rate"`
 		Amount       decimal.Decimal `json:"amount"`
+		ServiceFee   decimal.Decimal `json:"service_fee"`
 		OrderId      string          `json:"order_id"`
 		Url          string          `json:"url"`
 		Status       int8            `json:"status"`

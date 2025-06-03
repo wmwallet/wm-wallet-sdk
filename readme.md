@@ -133,6 +133,7 @@
 
 | symbol   | 
 |----------|
+| USDT/CNY |
 | USDT/TON |
 | USDT/TRX |
 | ......   |
@@ -158,10 +159,11 @@
       "symbol": "USDT/CNY",
       "exchange_rate": "7.274951607768018",
       "amount": "0.2749159180474064",
+      "service_fee": "0",
       "order_id": "06ceb53730794f62be1a29d8aaf2efeb",
       "url": "http://43.156.157.230/wm/?broker=bacb849551df44e19608b46f9c4db031&no=06ceb53730794f62be1a29d8aaf2efeb&lang=zh",
       "status": 8,
-      "status_desc": "订单成功"
+      "status_desc": "Order Success"
     }
   }
 }
@@ -183,10 +185,11 @@
         "symbol": "USDT/CNY",
         "exchange_rate": "7.274951607768018",
         "amount": "0.2749159180474064",
+        "service_fee": "0",
         "order_id": "06ceb53730794f62be1a29d8aaf2efeb",
         "url": "http://43.156.157.230/wm/?broker=bacb849551df44e19608b46f9c4db031&no=06ceb53730794f62be1a29d8aaf2efeb&lang=zh",
         "status": 8,
-        "status_desc": "订单成功"
+        "status_desc": "Order Success"
     }
 }
 ```
@@ -200,26 +203,27 @@ path: `/v1/api/broker/order/create`
 req:
 
 | name         | type            | comment | require |
-|--------------|-----------------|---------|--------|
-| source_id    | string          | uniq id | y      |
-| chain_id     | int             |         | y      |
-| coin_id      | int             |         | y      |
-| fiat_amount  | decimal(40,18)  |         | y      |
-| symbol       | string          |         | y      |
-| callback_url | string          |         | y      |
+|--------------|-----------------|---------|---------|
+| source_id    | string          | uniq id | y       |
+| chain_id     | int             |         | y       |
+| coin_id      | int             |         | y       |
+| fiat_amount  | decimal(40,18)  |         | y       |
+| symbol       | string          |         | y       |
+| callback_url | string          |         | y       |
 
 resp:
 
-| name          | type           | comment       |
-|---------------|----------------|---------------|
-| source_id     | string         | broker uid    |
-| chain_id      | int            |               |
-| coin_id       | int            |               |
-| fiat_amount   | decimal(40,18) |               |
-| exchange_rate | decimal(40,18) |               |
-| amount        | decimal(40,18) |               |
-| order_id      | string         | wm wallet uid |
-| url           | string         | a html view   |
+| name          | type           | comment                   |
+|---------------|----------------|---------------------------|
+| source_id     | string         | broker uid                |
+| chain_id      | int            |                           |
+| coin_id       | int            |                           |
+| fiat_amount   | decimal(40,18) |                           |
+| exchange_rate | decimal(40,18) |                           |
+| amount        | decimal(40,18) |                           |
+| service_fee   | decimal(40,18) | service fee (amount*0.3%) |
+| order_id      | string         | wm wallet uid             |
+| url           | string         | a html view               |
 
 ### Deposit.Detail
 
@@ -233,22 +237,23 @@ req:
 
 resp:
 
-| name          | type           | comment     |
-|---------------|----------------|-------------|
-| source_id     | string         |             |
-| chain_id      | int            |             |
-| coin_id       | int            |             |
-| address       | string         |             |
-| tag           | string         |             |
-| hash          | string         |             |
-| fiat_amount   | decimal(40,18) |             |
-| symbol        | string         |             |
-| exchange_rate | decimal(40,18) |             |
-| amount        | decimal(40,18) |             |
-| order_id      | string         |             |
-| url           | string         | a html view |
-| status        | int8           |             |
-| status_desc   | string         |             |
+| name          | type           | comment                   |
+|---------------|----------------|---------------------------|
+| source_id     | string         |                           |
+| chain_id      | int            |                           |
+| coin_id       | int            |                           |
+| address       | string         |                           |
+| tag           | string         |                           |
+| hash          | string         |                           |
+| fiat_amount   | decimal(40,18) |                           |
+| symbol        | string         |                           |
+| exchange_rate | decimal(40,18) |                           |
+| amount        | decimal(40,18) |                           |
+| service_fee   | decimal(40,18) | service fee (amount*0.3%) |
+| order_id      | string         |                           |
+| url           | string         | a html view               |
+| status        | int8           |                           |
+| status_desc   | string         |                           |
 
 
 | status | status_desc     |
@@ -278,27 +283,37 @@ resp:
 
 ### Deposit Callback Struct
 
-| name          | type           | comment     |
-|---------------|----------------|-------------|
-| source_id     | string         |             |
-| chain_id      | int            |             |
-| coin_id       | int            |             |
-| address       | string         |             |
-| tag           | string         |             |
-| hash          | string         |             |
-| fiat_amount   | decimal(40,18) |             |
-| symbol        | string         | USDT/TON    |
-| exchange_rate | decimal(40,18) |             |
-| amount        | decimal(40,18) | 0.123456    |
-| order_id      | string         |             |
-| status        | int8           |             |
-| status_desc   | string         |             |
+| name          | type           | comment  |
+|---------------|----------------|----------|
+| source_id     | string         |          |
+| chain_id      | int            |          |
+| coin_id       | int            |          |
+| address       | string         |          |
+| tag           | string         |          |
+| hash          | string         |          |
+| fiat_amount   | decimal(40,18) |          |
+| symbol        | string         | USDT/CNY |
+| exchange_rate | decimal(40,18) |          |
+| amount        | decimal(40,18) | 0.123456 |
+| service_fee   | decimal(40,18) |          |
+| order_id      | string         |          |
+| status        | int8           |          |
+| status_desc   | string         |          |
 
-| status | status_desc      |
-|--------|------------------|
-| 0      | Withdraw Doing   |
-| 4      | Withdraw Success |
-| 8      | Withdraw Fail    |
+| status | status_desc     |
+|--------|-----------------|
+| 0      | Order Created   |
+| 8      | Order Success   |
+| 12     | User Cancel     |
+| 16     | Expire Cancel   |
+| 20     | Less Amount     |
+
+### Withdraw Callback Resp Struct
+| name | type   | comment            |
+|------|--------|--------------------|
+| code | int    | 0: success 1: fail |
+| msg  | string | success or err msg |
+
 
 ### Withdraw.Create
 
@@ -306,15 +321,15 @@ path:    `/v1/api/broker/order/withdraw`
 
 req:
 
-| name         | type           | comment | require |
-|--------------|----------------|---------|---------|
-| source_id    | string         | uniq id | y       |
-| chain_id     | int            |         | y       |
-| coin_id      | int            |         | y       |
-| address      | string         |         | y       |
-| tag          | string         |         | y       |
-| amount       | decimal(40,18) |         | y       |
-| callback_url | string          |         | y      |
+| name         | type           | comment | require  |
+|--------------|----------------|---------|----------|
+| source_id    | string         | uniq id | y        |
+| chain_id     | int            |         | y        |
+| coin_id      | int            |         | y        |
+| address      | string         |         | y        |
+| tag          | string         |         | y        |
+| amount       | decimal(40,18) |         | y        |
+| callback_url | string         |         | y        |
 
 resp:
 
@@ -348,11 +363,17 @@ resp:
 | symbol        | string          |         |
 | exchange_rate | decimal(40,18)  |         |
 | amount        | decimal(40,18)  |         |
-| service_fee   | decimal(40,18)  |         |
+| gas_fee       | decimal(40,18)  |         |
 | order_id      | string          |         |
 | status        | int8            |         |
 | status_desc   | string          |         |
 
+
+| status | status_desc      |
+|--------|------------------|
+| 0      | Withdraw Doing   |
+| 4      | Withdraw Success |
+| 8      | Withdraw Fail    |
 
 ### Withdraw Callback Struct
 
@@ -364,10 +385,22 @@ resp:
 | coin_id     | int            |         |
 | tag         | string         |         |
 | amount      | decimal(40,18) |         |
-| service_fee | decimal(40,18) |         |
+| gas_fee     | decimal(40,18) |         |
 | status      | int8           |         |
 | status_desc | string         |         |
 
+
+| status | status_desc      |
+|--------|------------------|
+| 0      | Withdraw Doing   |
+| 4      | Withdraw Success |
+| 8      | Withdraw Fail    |
+
+### Withdraw Callback Resp Struct
+| name | type   | comment            |
+|------|--------|--------------------|
+| code | int    | 0: success 1: fail |
+| msg  | string | success or err msg |
 
 ## sdk example
 
