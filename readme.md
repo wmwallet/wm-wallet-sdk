@@ -134,6 +134,7 @@
 | symbol   | 
 |----------|
 | USDT/CNY |
+| USDT/USD |
 | USDT/TON |
 | USDT/TRX |
 | ......   |
@@ -202,14 +203,16 @@ path: `/v1/api/broker/order/create`
 
 req:
 
-| name         | type            | comment | require |
-|--------------|-----------------|---------|---------|
-| source_id    | string          | uniq id | y       |
-| chain_id     | int             |         | y       |
-| coin_id      | int             |         | y       |
-| fiat_amount  | decimal(40,18)  |         | y       |
-| symbol       | string          |         | y       |
-| callback_url | string          |         | y       |
+| name          | type              | comment                                | require |
+|---------------|-------------------|----------------------------------------|---------|
+| source_id     | string            | uniq id                                | y       |
+| chain_id      | int               |                                        | y       |
+| coin_id       | int               |                                        | y       |
+| fiat_amount   | decimal(40,18)    |                                        | y       |
+| symbol        | string            |                                        | y       |
+| exchange_rate | decimal(40,18)    | To control the exchange rate yourself  | n       |
+| amount        | decimal(40,18)    | To control the exchange rate yourself  | n       |
+| callback_url  | string            |                                        | y       |
 
 resp:
 
@@ -321,15 +324,18 @@ path:    `/v1/api/broker/order/withdraw`
 
 req:
 
-| name         | type           | comment | require  |
-|--------------|----------------|---------|----------|
-| source_id    | string         | uniq id | y        |
-| chain_id     | int            |         | y        |
-| coin_id      | int            |         | y        |
-| address      | string         |         | y        |
-| tag          | string         |         | y        |
-| amount       | decimal(40,18) |         | y        |
-| callback_url | string         |         | y        |
+| name           | type             | comment                                | require |
+|----------------|------------------|----------------------------------------|---------|
+| source_id      | string           | uniq id                                | y       |
+| chain_id       | int              |                                        | y       |
+| coin_id        | int              |                                        | y       |
+| address        | string           |                                        | y       |
+| tag            | string           |                                        | y       |
+| fiat_amount    | decimal(40,18)   | To control the exchange rate yourself  | n       |
+| symbol         | string           | To control the exchange rate yourself  | n       |
+| exchange_rate  | decimal(40,18)   | To control the exchange rate yourself  | n       |
+| amount         | decimal(40,18)   |                                        | y       |
+| callback_url   | string           |                                        | y       |
 
 resp:
 
@@ -486,3 +492,4 @@ func (wws *WmWalletSDK) WithdrawOrderDetail(req *withdraw.GetDetailRequest) (res
 
 ## Java SDK
 ### [document](https://github.com/wmwallet/wm-wallet-sdk-java)
+### [document](https://github.com/wmwallet/wm-wallet-sdk-php)
