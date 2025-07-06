@@ -19,8 +19,8 @@ type (
 		CoinId       int             `json:"coin_id"`
 		FiatAmount   decimal.Decimal `json:"fiat_amount"`
 		Symbol       string          `json:"symbol"`
-		ExchangeRate decimal.Decimal `json:"exchange_rate"`
-		Amount       decimal.Decimal `json:"amount"`
+		ExchangeRate decimal.Decimal `json:"exchange_rate"` // new add
+		Amount       decimal.Decimal `json:"amount"`        // new add
 		CallbackUrl  string          `json:"callback_url"`
 	}
 
@@ -50,8 +50,8 @@ type (
 		Hash         string          `json:"hash"`
 		FiatAmount   decimal.Decimal `json:"fiat_amount"`
 		Symbol       string          `json:"symbol"`
-		ExchangeRate decimal.Decimal `json:"exchange_rate"` // new add
-		Amount       decimal.Decimal `json:"amount"`        // new add
+		ExchangeRate decimal.Decimal `json:"exchange_rate"`
+		Amount       decimal.Decimal `json:"amount"`
 		ServiceFee   decimal.Decimal `json:"service_fee"`
 		OrderId      string          `json:"order_id"`
 		Url          string          `json:"url"`
