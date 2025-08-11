@@ -22,6 +22,7 @@ type (
 		ExchangeRate decimal.Decimal `json:"exchange_rate"` // new add
 		Amount       decimal.Decimal `json:"amount"`        // new add
 		CallbackUrl  string          `json:"callback_url"`
+		Lang         string          `json:"lang"` // new add 0809
 	}
 
 	CreateOrderResp struct {
@@ -65,7 +66,24 @@ type (
 
 	CancelOrderResp struct{}
 
-	Resp[T CreateOrderResp | GetDetailResponse | CancelOrderResp] struct {
+	CreatePreOrderReq struct {
+		SourceId    string          `json:"source_id"`
+		Coin        string          `json:"coin"`
+		FiatAmount  decimal.Decimal `json:"fiat_amount"`
+		Lang        string          `json:"lang"`
+		HomeUrl     string          `json:"home_url"`
+		SuccessUrl  string          `json:"success_url"`
+		FailureUrl  string          `json:"failure_url"`
+		CallbackUrl string          `json:"callback_url"`
+	}
+
+	CreatePreOrderResp struct {
+		SourceId string `json:"source_id"`
+		OrderId  string `json:"order_id"`
+		PayUrl   string `json:"pay_url"`
+	}
+
+	Resp[T CreateOrderResp | GetDetailResponse | CancelOrderResp | CreatePreOrderResp] struct {
 		Data T      `json:"data"`
 		Code int    `json:"code"`
 		Msg  string `json:"msg"`
@@ -73,9 +91,10 @@ type (
 )
 
 const (
-	routeBrokerOrderCreate = "/v1/api/broker/order/create"
-	routeBrokerOrderDetail = "/v1/api/broker/order/detail"
-	routeBrokerOrderCancel = "/v1/api/broker/order/cancel"
+	routeBrokerOrderCreate    = "/v1/api/broker/order/create"
+	routeBrokerOrderDetail    = "/v1/api/broker/order/detail"
+	routeBrokerOrderCancel    = "/v1/api/broker/order/cancel"
+	routeBrokerPreOrderCancel = "/v1/api/broker/pre-order/create"
 )
 
 type Deposit struct {
@@ -157,7 +176,7 @@ func (d *Deposit) Cancel(ctx context.Context, req *CancelOrderReq) (*CancelOrder
 	return &resp.Data, nil
 }
 
-func buildReq[T *CreateOrderReq | *GetDetailRequest | *CancelOrderReq](ctx context.Context, req T, baseUrl, router string) (*http.Request, error) {
+func buildReq[T *CreateOrderReq | *GetDetailRequest | *CancelOrderReq | *CreatePreOrderReq](ctx context.Context, req T, baseUrl, router string) (*http.Request, error) {
 	body, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
@@ -170,9 +189,32 @@ func buildReq[T *CreateOrderReq | *GetDetailRequest | *CancelOrderReq](ctx conte
 	return r, nil
 }
 
-func getErr[T CreateOrderResp | GetDetailResponse | CancelOrderResp](resp *Resp[T]) error {
+func getErr[T CreateOrderResp | GetDetailResponse | CancelOrderResp | CreatePreOrderResp](resp *Resp[T]) error {
 	if resp.Code == 0 {
 		return nil
 	}
 	return errors.New(resp.Msg)
+}
+
+func (d *Deposit) CreatePre(ctx context.Context, req *CreatePreOrderReq) (*CreatePreOrderResp, error) {
+	r, err := buildReq(ctx, req, d.url, routeBrokerPreOrderCancel)
+	if err != nil {
+		return nil, err
+	}
+	body, err := d.w.Post(ctx, r)
+	if err != nil {
+		return nil, err
+	}
+	var tmp string
+	if err := json.Unmarshal(body, &tmp); err != nil {
+		return nil, err
+	}
+	var resp = &Resp[CreatePreOrderResp]{}
+	if err := json.Unmarshal([]byte(tmp), &resp); err != nil {
+		return nil, err
+	}
+	if err = getErr(resp); err != nil {
+		return nil, err
+	}
+	return &resp.Data, nil
 }
